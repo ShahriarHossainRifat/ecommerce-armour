@@ -1,0 +1,47 @@
+/* src/index.css */
+
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/effect-coverflow';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add smooth scrolling behavior globally */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Add base body styles */
+body {
+  @apply font-sans antialiased text-brand-gray-dark; /* Set default font and base text color */
+}
+
+/* Optional: Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: theme('colors.gray.100');
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: theme('colors.brand-gray');
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.brand-dark-alt');
+}
+
+/* Add custom component styles below if needed */
+/* Example for text-stroke (if not using inline styles) */
+/* @layer components {
+  .text-stroke-custom {
+    -webkit-text-stroke: 1.5px theme('colors.brand-dark-alt');
+    text-stroke: 1.5px theme('colors.brand-dark-alt');
+    @apply text-transparent;
+  }
+} */
