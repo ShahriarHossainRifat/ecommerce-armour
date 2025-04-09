@@ -1,6 +1,5 @@
 // src/pages/NotFoundPage.tsx
 import React from "react";
-import { Link } from "react-router-dom";
 import Button from "../components/ui/Button"; // Assuming Button component exists
 
 const NotFoundPage: React.FC = () => {

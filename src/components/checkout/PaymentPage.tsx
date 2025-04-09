@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext"; // *** Import useCart ***
 import CheckoutStepsIndicator from "../../components/checkout/CheckoutStepsIndicator";
 import OrderSummary from "../../components/checkout/OrderSummary";
-import InputField from "../../components/ui/InputField"; // Keep if needed for billing form
 import Checkbox from "../../components/ui/Checkbox";
 import Button from "../../components/ui/Button";
 import Tabs from "../../components/ui/Tabs";
@@ -19,7 +18,7 @@ const PaymentPage: React.FC = () => {
   const { cartTotal, itemCount } = useCart();
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
   // Add state for payment validity based on selected method/form inputs
-  const [isPaymentValid, setIsPaymentValid] = useState(true); // Placeholder - set based on form validation
+  const [isPaymentValid] = useState(true); // Placeholder - set based on form validation
 
   const handleContinue = () => {
     // TODO: Add actual validation based on selected payment method/form state

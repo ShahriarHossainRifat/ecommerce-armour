@@ -3,7 +3,6 @@ import React from "react";
 
 // *** ENSURE THESE IMPORT PATHS ARE CORRECT ***
 import { ALL_PRODUCTS_MOCK } from "../data/products"; // Import the full product list
-import { Product } from "../types/product"; // Import type if needed elsewhere
 // Import Section Components
 import HeroSection from "../components/landing/HeroSection";
 import FeaturesSection from "../components/landing/FeaturesSection";

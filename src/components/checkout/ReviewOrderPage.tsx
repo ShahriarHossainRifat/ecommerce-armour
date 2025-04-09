@@ -41,12 +41,6 @@ const placeholderShippingAddress = {
 const placeholderPaymentMethod = { type: "Debit Card", last4: "89" };
 
 const formatPrice = (amount: number) => `$${amount.toFixed(2)}`;
-const formatDate = (dateString: string) =>
-  new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 
 const ReviewOrderPage: React.FC = () => {
   const navigate = useNavigate();

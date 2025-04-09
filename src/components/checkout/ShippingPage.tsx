@@ -5,7 +5,6 @@ import { useCart } from "../../contexts/CartContext"; // *** Import useCart ***
 import CheckoutStepsIndicator from "../../components/checkout/CheckoutStepsIndicator";
 import OrderSummary from "../../components/checkout/OrderSummary";
 import AddressCard from "../../components/checkout/AddressCard"; // Assuming Address type is defined here or imported
-import InputField from "../../components/ui/InputField";
 import Checkbox from "../../components/ui/Checkbox";
 import Button from "../../components/ui/Button";
 // Assuming Address type is defined/imported if needed for savedAddresses
@@ -36,29 +35,24 @@ const savedAddresses = [
 const ShippingPage: React.FC = () => {
   const navigate = useNavigate();
   const { cartTotal, itemCount } = useCart(); // *** Get cart data ***
-  const [selectedAddressId, setSelectedAddressId] = useState<
+  const [selectedAddressId] = useState<
     string | number | null
   >(savedAddresses[0]?.id || null);
-  const [newAddress, setNewAddress] = useState({
+  const [] = useState({
     /* ... form fields ... */
   });
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [isAddingNew] = useState(false);
 
-  const handleSelectAddress = (id: string | number) => {
+  const handleSelectAddress = () => {
     /* ... */
   };
-  const handleEditAddress = (id: string | number) => {
+  const handleEditAddress = () => {
     /* ... */
   };
-  const handleDeleteAddress = (id: string | number) => {
+  const handleDeleteAddress = () => {
     /* ... */
   };
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    /* ... */
-  };
-  const handleAddNewAddress = (e: React.FormEvent) => {
+  const handleAddNewAddress = () => {
     /* ... */
   };
 

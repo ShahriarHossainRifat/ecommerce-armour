@@ -51,6 +51,8 @@ export const dealsData: DealItem[] = [
   }, // m-005 needs discount/tag added
 ];
 
+
+export type { DealItem };
 // Note: You might need to adjust the discount text % here to match the calculated discount
 // in ALL_PRODUCTS_MOCK for consistency, or calculate it dynamically.
 // Also ensure product m-005 is marked as on sale or has originalPrice in ALL_PRODUCTS_MOCK.

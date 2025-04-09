@@ -1,7 +1,6 @@
 // src/components/pdp/tabs/ReviewsTabContent.tsx
 import React from "react";
 import { FiStar } from "react-icons/fi";
-import Button from "../../ui/Button"; // Import Button
 
 // Placeholder types - define based on your actual review data structure
 interface Review {

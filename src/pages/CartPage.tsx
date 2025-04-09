@@ -9,7 +9,7 @@ import OrderSummary from "../components/checkout/OrderSummary"; // Reuse Order S
 import Breadcrumbs from "../components/common/Breadcrumbs";
 // Import types and helpers
 import { CartItemType } from "../types/product"; // Ensure path is correct
-import { FiTrash2, FiShoppingCart } from "react-icons/fi"; // Icons
+import { FiShoppingCart } from "react-icons/fi"; // Icons
 
 const formatPrice = (amount: number) => `$${amount.toFixed(2)}`;
 
@@ -25,7 +25,7 @@ const CartPage: React.FC = () => {
   const navigate = useNavigate();
 
   // State for promo code (if managed locally on this page)
-  const [promoCode, setPromoCode] = useState("");
+  const [] = useState("");
 
   const handleUpdateQuantity = (cartItemId: string, newQuantity: number) => {
     updateQuantity(cartItemId, newQuantity);
@@ -36,10 +36,6 @@ const CartPage: React.FC = () => {
     removeItem(cartItemId);
   };
 
-  const handleApplyPromo = () => {
-    // TODO: Implement promo code validation logic
-    alert(`Applying promo code ${promoCode} (placeholder)`);
-  };
 
   const handleCheckout = () => {
     // TODO: Add checks if needed (e.g., minimum order amount)

@@ -1,6 +1,5 @@
 // src/pages/OffersPage.tsx
 import React, { useMemo } from "react";
-import { Product } from "../types/product"; // Import type
 import { ALL_PRODUCTS_MOCK } from "../data/products"; // Import all products
 import ProductCard from "../components/products/ProductCard";
 import Breadcrumbs from "../components/common/Breadcrumbs";

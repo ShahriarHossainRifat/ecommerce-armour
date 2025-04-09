@@ -1,6 +1,5 @@
 // src/components/common/MiniCart.tsx
 import React from "react";
-import { Link } from "react-router-dom";
 import { FiX, FiShoppingCart } from "react-icons/fi";
 import Button from "../ui/Button";
 import CartItem from "../cart/CartItem";

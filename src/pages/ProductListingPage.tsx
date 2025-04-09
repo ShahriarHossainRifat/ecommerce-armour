@@ -4,9 +4,8 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useCallback,
 } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 // *** ENSURE THESE IMPORT PATHS ARE CORRECT ***
 import { Product } from "../types/product";
 import { ALL_PRODUCTS_MOCK } from "../data/products";
@@ -121,8 +120,8 @@ const ProductListingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // --- State ---
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null); // Currently only for potential future async errors
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null); // Currently only for potential future async errors
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState(
     () => searchParams.get("sort") || "default"

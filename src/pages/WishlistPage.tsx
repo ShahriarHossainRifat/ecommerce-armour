@@ -1,6 +1,6 @@
 // src/pages/WishlistPage.tsx
 import React, { useMemo } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Import Link for breadcrumbs/buttons
+import { useNavigate } from "react-router-dom"; // Import Link for breadcrumbs/buttons
 import { useAuth } from "../contexts/AuthContext";
 import { useWishlist } from "../contexts/WishlistContext";
 import { getProductById } from "../data/utils"; // Utility to get product details by ID
@@ -15,7 +15,6 @@ const WishlistPage: React.FC = () => {
   const {
     wishlistItems,
     loading: wishlistLoading,
-    removeFromWishlist,
   } = useWishlist(); // Get remove function
   const navigate = useNavigate();
 
