@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Single Page Apps for GitHub Pages</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks if a redirect is needed and performs it.
+      var segmentCount = 0; // Set to 1 if your repo name is used in the path (like for project pages)
+      var l = window.location;
+      var repoName = l.pathname.split('/')[1]; // Automatically get repo name
+      if (repoName && l.pathname.startsWith('/' + repoName + '/')) {
+        segmentCount = 1; // Set segmentCount if deployed in a subdirectory (Project Page)
+      }
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
