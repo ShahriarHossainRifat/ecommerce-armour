@@ -13,7 +13,7 @@ export default defineConfig(({ command }) => {
 
   return {
     plugins: [react()],
-    base: base, // Set the base path here
+    base: '/ecommerce-armour/', // Set the base path here
     build: {
       outDir: "dist", // Ensure output directory is 'dist' (default)
     },
