@@ -1,6 +1,7 @@
 // src/pages/LoginPage.tsx
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import logoSrc from "../assets/images/armour-logo.svg";
 import InputField from "../components/ui/InputField";
 import Button from "../components/ui/Button";
 import Checkbox from "../components/ui/Checkbox";
@@ -8,10 +9,9 @@ import SocialButton from "../components/ui/SocialButton";
 import { useAuth } from "../contexts/AuthContext";
 import { FiHome, FiLoader } from "react-icons/fi";
 
+import loginBackgroundSrc from "../assets/images/login-background.webp";
+
 // Placeholders...
-const backgroundImageUrl =
-  "https://via.placeholder.com/845x1024/cccccc/969696?text=Login+Background";
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
 const googleIconUrl = "https://via.placeholder.com/30x30/cccccc/969696?text=G";
 const facebookIconUrl =
   "https://via.placeholder.com/30x30/cccccc/969696?text=F";
@@ -53,10 +53,10 @@ const LoginPage: React.FC = () => {
       {/* Left Panel */}
       <div
         className="hidden lg:block lg:w-[845px] relative bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        style={{ backgroundImage: `url(${loginBackgroundSrc})` }}
       >
         <Link to="/" className="absolute top-[68px] left-[60px]">
-          <img src={logoUrl} alt="Armour Logo" className="h-[42px] w-auto" />
+          <img src={logoSrc} alt="Armour Logo" className="h-[42px] w-auto" />
         </Link>
         {/* UPDATED: Home Link Style (Desktop) */}
         <Link
@@ -85,7 +85,7 @@ const LoginPage: React.FC = () => {
             <Link to="/">
               {" "}
               <img
-                src={logoUrl}
+                src={logoSrc}
                 alt="Armour Logo"
                 className="h-[42px] w-auto inline-block"
               />{" "}

@@ -1,16 +1,16 @@
 // src/pages/SignUpPage.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoSrc from "../assets/images/armour-logo.svg";
 import InputField from "../components/ui/InputField";
 import Button from "../components/ui/Button";
 import Checkbox from "../components/ui/Checkbox";
 import { useAuth } from "../contexts/AuthContext";
 import { FiHome, FiLoader } from "react-icons/fi"; // Changed icon import
 
+import signupBackgroundSrc from "../assets/images/signup-background.webp";
+
 // Placeholders...
-const backgroundImageUrl =
-  "https://via.placeholder.com/845x1024/cccccc/969696?text=Signup+Background";
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
 
 const SignUpPage: React.FC = () => {
   const [fullName, setFullName] = useState("");
@@ -60,12 +60,12 @@ const SignUpPage: React.FC = () => {
       {/* Left Panel */}
       <div
         className="hidden lg:block lg:w-[845px] relative bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        style={{ backgroundImage: `url(${signupBackgroundSrc})` }}
       >
         <Link to="/" className="absolute top-[68px] left-[60px]">
           {" "}
           <img
-            src={logoUrl}
+            src={logoSrc}
             alt="Armour Logo"
             className="h-[42px] w-auto"
           />{" "}
@@ -99,7 +99,7 @@ const SignUpPage: React.FC = () => {
             <Link to="/">
               {" "}
               <img
-                src={logoUrl}
+                src={logoSrc}
                 alt="Armour Logo"
                 className="h-[42px] w-auto inline-block"
               />{" "}

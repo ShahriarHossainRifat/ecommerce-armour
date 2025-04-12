@@ -1,6 +1,7 @@
 // src/components/common/Navbar.tsx
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import logoSrc from "../../assets/images/armour-logo.svg";
 import {
   FiSearch,
   FiHeart,
@@ -16,8 +17,6 @@ import Button from "../ui/Button";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useWishlist } from "../../contexts/WishlistContext";
-
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
 
 const Navbar: React.FC = () => {
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
@@ -93,7 +92,7 @@ const Navbar: React.FC = () => {
               <Link to="/" className="flex-shrink-0" onClick={handleLinkClick}>
                 <img
                   className="h-8 sm:h-[42px] w-auto"
-                  src={logoUrl}
+                  src={logoSrc}
                   alt="Armour Logo"
                 />
               </Link>

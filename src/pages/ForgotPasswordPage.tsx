@@ -1,14 +1,14 @@
 // src/pages/ForgotPasswordPage.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoSrc from "../assets/images/armour-logo.svg";
 import InputField from "../components/ui/InputField";
 import Button from "../components/ui/Button";
 import { FiArrowLeft } from "react-icons/fi"; // Using react-icons
 
+import forgotPasswordBackgroundSrc from "../assets/images/forgotpass-background.webp";
+
 // Placeholder URLs
-const backgroundImageUrl =
-  "https://via.placeholder.com/845x1024/cccccc/969696?text=ForgotPass+BG";
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
 
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -28,10 +28,10 @@ const ForgotPasswordPage: React.FC = () => {
       {/* Left Panel */}
       <div
         className="hidden lg:block lg:w-[845px] relative bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+        style={{ backgroundImage: `url(${forgotPasswordBackgroundSrc})` }}
       >
         <Link to="/" className="absolute top-[68px] left-[60px]">
-          <img src={logoUrl} alt="Armour Logo" className="h-[42px] w-auto" />
+          <img src={logoSrc} alt="Armour Logo" className="h-[42px] w-auto" />
         </Link>
       </div>
 
@@ -42,7 +42,7 @@ const ForgotPasswordPage: React.FC = () => {
           <div className="lg:hidden mb-8 text-center">
             <Link to="/">
               <img
-                src={logoUrl}
+                src={logoSrc}
                 alt="Armour Logo"
                 className="h-[42px] w-auto inline-block"
               />

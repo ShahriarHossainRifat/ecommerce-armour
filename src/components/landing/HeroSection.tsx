@@ -2,15 +2,15 @@
 import React from "react";
 import Button from "../ui/Button"; // Import button component
 
+import heroLeftSrc from "../../assets/images/Hero-Section/hero-left.webp";
+import heroRightSrc from "../../assets/images/Hero-Section/hero-left.webp";
+import heroTopSrc from "../../assets/images/Hero-Section/hero-top.webp";
+import heroBottom from "../../assets/images/Hero-Section/hero-bottom.webp";
 // Placeholder image URLs
-const leftImageUrl =
-  "https://via.placeholder.com/357x689/e0e0e0/969696?text=Left+Hero";
-const rightImageUrl =
-  "https://via.placeholder.com/356x689/e0e0e0/969696?text=Right+Hero";
-const topImageUrl =
-  "https://via.placeholder.com/358x126/e0e0e0/969696?text=Top+Hero";
-const bottomImageUrl =
-  "https://via.placeholder.com/357x126/e0e0e0/969696?text=Bottom+Hero";
+const leftImageUrl = heroLeftSrc;
+const rightImageUrl = heroRightSrc;
+const topImageUrl = heroTopSrc;
+const bottomImageUrl = heroBottom;
 
 const HeroSection: React.FC = () => {
   return (

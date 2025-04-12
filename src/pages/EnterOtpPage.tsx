@@ -1,15 +1,15 @@
 // src/pages/EnterOtpPage.tsx
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import logoSrc from "../assets/images/armour-logo.svg";
 import Button from "../components/ui/Button";
 import { FiArrowLeft } from "react-icons/fi";
 import Modal from "../components/ui/Modal";
 import OtpSuccessContent from "../components/auth/OtpSuccessContent";
 
+import otpBackgroundSrc from "../assets/images/otp-background.webp";
+
 // Placeholder URLs
-const backgroundImageUrl =
-  "https://via.placeholder.com/845x1024/cccccc/969696?text=EnterOtp+BG";
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
 
 const OTP_LENGTH = 5; // Based on the 5 input boxes in CSS
 
@@ -97,10 +97,10 @@ const EnterOtpPage: React.FC = () => {
         {/* Left Panel */}
         <div
           className="hidden lg:block lg:w-[845px] relative bg-cover bg-center"
-          style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+          style={{ backgroundImage: `url(${otpBackgroundSrc})` }}
         >
           <Link to="/" className="absolute top-[68px] left-[60px]">
-            <img src={logoUrl} alt="Armour Logo" className="h-[42px] w-auto" />
+            <img src={logoSrc} alt="Armour Logo" className="h-[42px] w-auto" />
           </Link>
         </div>
 
@@ -111,7 +111,7 @@ const EnterOtpPage: React.FC = () => {
             <div className="lg:hidden mb-8 text-center">
               <Link to="/">
                 <img
-                  src={logoUrl}
+                  src={logoSrc}
                   alt="Armour Logo"
                   className="h-[42px] w-auto inline-block"
                 />

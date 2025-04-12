@@ -1,6 +1,7 @@
 // src/components/common/Footer.tsx
 import React from "react";
 import { Link } from "react-router-dom";
+import logoSrc from '../../assets/images/armour-logo.svg';
 // Ensure you have react-icons installed: npm install react-icons
 import {
   FaFacebookF,
@@ -12,7 +13,6 @@ import { FiPhone, FiMail, FiMapPin } from "react-icons/fi"; // Using different i
 import Button from "../ui/Button"; // Import Button component
 
 // Placeholder Logo URL - Replace with your actual logo import or path
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
 
 const Footer: React.FC = () => {
   return (
@@ -215,7 +215,7 @@ const Footer: React.FC = () => {
         {/* Bottom Row: Logo, Links, Social */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <Link to="/">
-            <img className="h-[42px] w-auto" src={logoUrl} alt="Armour Logo" />
+            <img className="h-[42px] w-auto" src={logoSrc} alt="Armour Logo" />
           </Link>
           {/* Centered links */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-base font-semibold text-brand-dark-alt opacity-80">
