@@ -2,55 +2,55 @@
 // Import the type definition
 import { DealItem } from "../types/product"; // Adjust path if needed
 
+import dealImage1Src from "../assets/images/Deals/deal-image-1.webp";
+import dealImage2Src from "../assets/images/Deals/deal-image-2.webp";
+import dealImage3Src from "../assets/images/Deals/deal-image-3.webp";
+import dealImage4Src from "../assets/images/Deals/deal-image-4.webp";
+import dealImage5Src from "../assets/images/Deals/deal-image-5.webp";
+
 // Ensure these product IDs exist in ALL_PRODUCTS_MOCK and are marked as Sale
 export const dealsData: DealItem[] = [
   {
     id: 1,
-    productId: "w-004",
-    imageUrl:
-      "https://via.placeholder.com/334x481/556B2F/EEE8AA?text=Women+Peacoat",
-    altText: "Woman in Peacoat",
+    productId: "w-004", // Example Product ID
+    imageUrl: dealImage1Src, // Use imported variable
+    altText: "Woman wearing stylish peacoat", // Descriptive alt text
     tagline: "01 — Fall Sale",
     discount: "23% OFF",
-  }, // w-004 IS on sale
+  },
   {
     id: 2,
-    productId: "m-002",
-    imageUrl:
-      "https://via.placeholder.com/334x481/D2B48C/8B4513?text=Men+Chinos",
-    altText: "Man wearing Chinos",
+    productId: "m-002", // Example Product ID
+    imageUrl: dealImage2Src, // Use imported variable
+    altText: "Man wearing slim fit chinos", // Descriptive alt text
     tagline: "02 — Smart Casual",
     discount: "24% OFF",
-  }, // m-002 IS on sale
+  },
   {
     id: 3,
-    productId: "m-009",
-    imageUrl:
-      "https://via.placeholder.com/334x481/556B2F/FFFFFF?text=Men+Bomber",
-    altText: "Bomber Jacket",
+    productId: "m-009", // Example Product ID
+    imageUrl: dealImage3Src, // Use imported variable
+    altText: "Olive green lightweight bomber jacket", // Descriptive alt text
     tagline: "03 — Weekend Deal",
     discount: "17% OFF",
-  }, // m-009 IS on sale
+  },
   {
     id: 4,
-    productId: "a-004",
-    imageUrl:
-      "https://via.placeholder.com/334x481/778899/FFFFFF?text=Accessory+Scarf",
-    altText: "Wool Scarf",
+    productId: "a-004", // Example Product ID
+    imageUrl: dealImage4Src, // Use imported variable
+    altText: "Soft patterned wool scarf", // Descriptive alt text
     tagline: "04 — Cozy Up",
     discount: "25% OFF",
-  }, // a-004 IS on sale
+  },
   {
     id: 5,
-    productId: "m-005",
-    imageUrl:
-      "https://via.placeholder.com/334x481/4A5568/E2E8F0?text=Men+Hoodie",
-    altText: "Man in Hoodie",
+    productId: "m-005", // Example Product ID
+    imageUrl: dealImage5Src, // Use imported variable
+    altText: "Man wearing performance hoodie", // Descriptive alt text
     tagline: "05 — Active Gear",
     discount: "10% OFF",
-  }, // m-005 needs discount/tag added
+  },
 ];
-
 
 export type { DealItem };
 // Note: You might need to adjust the discount text % here to match the calculated discount

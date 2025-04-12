@@ -1,40 +1,43 @@
 // src/components/landing/FeaturesSection.tsx
 import React from "react";
-// Placeholder icons - replace with actual icons (e.g., from react-icons)
-const FeatureIcon1 = () => (
-  <div className="w-[38px] h-[38px] bg-brand-dark-alt opacity-90 rounded"></div>
-);
-const FeatureIcon2 = () => (
-  <div className="w-[38px] h-[38px] bg-brand-dark-alt opacity-90 rounded"></div>
-);
-const FeatureIcon3 = () => (
-  <div className="w-[38px] h-[38px] bg-brand-dark-alt opacity-90 rounded"></div>
-);
-const FeatureIcon4 = () => (
-  <div className="w-[38px] h-[38px] bg-brand-dark-alt opacity-90 rounded"></div>
-);
 
-const featuresData = [
+// --- Import Actual Feature Icons ---
+import serviceIconSrc from "../../assets/images/Icons/icon-service.svg";
+import paymentIconSrc from "../../assets/images/Icons/icon-payment.svg";
+import deliveryIconSrc from "../../assets/images/Icons/icon-delivery.svg";
+import qualityIconSrc from "../../assets/images/Icons/icon-quality.svg";
+// --- End Icon Imports ---
+
+// Define feature data structure
+interface FeatureData {
+  iconSrc: string;
+  title: string;
+  description: string;
+  key: number;
+}
+
+// Data using imported icon sources
+const featuresData: FeatureData[] = [
   {
-    icon: <FeatureIcon1 />,
+    iconSrc: serviceIconSrc,
     title: "Professional Service",
     description: "Efficient customer support from passionate team",
     key: 1,
   },
   {
-    icon: <FeatureIcon2 />,
+    iconSrc: paymentIconSrc,
     title: "Secure Payment",
     description: "Different secure payment methods",
     key: 2,
   },
   {
-    icon: <FeatureIcon3 />,
+    iconSrc: deliveryIconSrc,
     title: "Fast Delivery",
     description: "Fast and convenient door to door delivery",
     key: 3,
   },
   {
-    icon: <FeatureIcon4 />,
+    iconSrc: qualityIconSrc,
     title: "Quality & Savings",
     description: "Comprehensive quality control and affordable prices",
     key: 4,
@@ -43,34 +46,42 @@ const featuresData = [
 
 const FeaturesSection: React.FC = () => {
   return (
-    <div className="bg-brand-bg shadow-md py-12 md:py-16">
-      {" "}
-      {/* Based on features container style */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16">
-          {" "}
-          {/* Adjusted gap */}
-          {featuresData.map((feature) => (
-            <div
-              key={feature.key}
-              className="flex flex-col items-start gap-3 md:gap-4"
-            >
-              {" "}
-              {/* Reduced gap */}
-              <div>{feature.icon}</div>
-              <div className="space-y-1 md:space-y-2">
-                <h3 className="font-nunito text-xl font-medium text-black">
-                  {feature.title}
-                </h3>
-                <p className="font-nunito text-sm text-brand-gray-dark leading-relaxed">
-                  {" "}
-                  {/* Adjusted line height */}
-                  {feature.description}
-                </p>
-              </div>
+    // Container Div:
+    // - Negative top margin to potentially overlap the section above slightly (adjust as needed)
+    // - Relative positioning with z-index to ensure it's above hero background if overlapping
+    // - Max width to control its extent (e.g., max-w-6xl or max-w-7xl)
+    // - Centered horizontally (mx-auto)
+    // - Background white, rounded corners, shadow
+    // - Specific padding matching the design's visual spacing (adjust px/py)
+    <div className="relative z-10 -mt-10 sm:-mt-12 md:-mt-16 max-w-6xl mx-auto bg-white rounded-lg shadow-lg px-6 py-8 md:px-12 md:py-10 lg:px-16">
+      {/* Grid layout for the four features */}
+      {/* Adjust gap based on visual spacing in design */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12">
+        {featuresData.map((feature) => (
+          // Feature Item Container: Center content vertically and horizontally
+          <div
+            key={feature.key}
+            className="flex flex-col items-center text-center gap-3 md:gap-4"
+          >
+            {/* Icon using img tag */}
+            <img
+              src={feature.iconSrc}
+              alt="" // Decorative, alt text provided by title/desc
+              aria-hidden="true"
+              // Size from CSS (38px)
+              className="w-[38px] h-[38px] object-contain mb-1" // Added slight margin below icon
+            />
+            {/* Text content */}
+            <div className="space-y-1">
+              <h3 className="font-nunito text-xl font-medium text-black">
+                {feature.title}
+              </h3>
+              <p className="font-nunito text-sm text-brand-gray-dark leading-relaxed">
+                {feature.description}
+              </p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,47 +1,48 @@
 /* src/index.css */
-
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
-@import 'swiper/css/effect-coverflow';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Add smooth scrolling behavior globally */
+/* --- Base Styles --- */
 html {
   scroll-behavior: smooth;
 }
 
-/* Optional: Add base body styles */
 body {
-  @apply font-sans antialiased text-brand-gray-dark; /* Set default font and base text color */
+  @apply font-sans antialiased text-brand-gray-dark;
 }
 
 /* Optional: Custom scrollbar styles */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: theme('colors.gray.100');
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb {
-  background: theme('colors.brand-gray');
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: theme('colors.brand-dark-alt');
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { @apply bg-gray-100 rounded; }
+::-webkit-scrollbar-thumb { @apply bg-brand-gray rounded; }
+::-webkit-scrollbar-thumb:hover { @apply bg-brand-dark-alt; }
 
-/* Add custom component styles below if needed */
-/* Example for text-stroke (if not using inline styles) */
-/* @layer components {
+/* --- Custom Component Styles --- */
+/* Example: Text Stroke utility (if using CSS class method) */
+@layer components {
   .text-stroke-custom {
     -webkit-text-stroke: 1.5px theme('colors.brand-dark-alt');
     text-stroke: 1.5px theme('colors.brand-dark-alt');
     @apply text-transparent;
   }
-} */
+}
+
+/* --- Styles for react-masonry-css --- */
+/* Adjust margin-left and padding-left to control the gap between columns */
+/* These values should match your desired Tailwind gap (e.g., 16px = gap-4) */
+.my-masonry-grid {
+  display: flex;
+  margin-left: -16px; /* Negative half of desired column gap */
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 16px; /* Desired column gap */
+  background-clip: padding-box; /* Important for gap calculation */
+}
+
+/* Style grid items (optional, but good for vertical spacing) */
+.my-masonry-grid_column > div { /* Targets the direct div child in each column */
+  margin-bottom: 16px; /* Vertical gap between items in the same column */
+}
+/* --- End react-masonry-css Styles --- */

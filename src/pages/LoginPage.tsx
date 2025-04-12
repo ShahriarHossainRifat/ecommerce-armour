@@ -10,11 +10,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { FiHome, FiLoader } from "react-icons/fi";
 
 import loginBackgroundSrc from "../assets/images/login-background.webp";
-
-// Placeholders...
-const googleIconUrl = "https://via.placeholder.com/30x30/cccccc/969696?text=G";
-const facebookIconUrl =
-  "https://via.placeholder.com/30x30/cccccc/969696?text=F";
+import googleIcon from "../assets/images/Icons/google-icon.webp";
+import facebookIcon from "../assets/images/Icons/facebook-icon.webp";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -172,13 +169,13 @@ const LoginPage: React.FC = () => {
           <div className="space-y-4">
             <SocialButton
               provider="Google"
-              iconSrc={googleIconUrl}
+              iconSrc={googleIcon}
               text="Login with Google"
               onClick={handleGoogleLogin}
             />
             <SocialButton
               provider="Facebook"
-              iconSrc={facebookIconUrl}
+              iconSrc={facebookIcon}
               text="Login with Facebook"
               onClick={handleFacebookLogin}
             />

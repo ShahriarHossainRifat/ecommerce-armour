@@ -2,13 +2,13 @@
 import React, { useState } from "react";
 import InputField from "../ui/InputField";
 import Button from "../ui/Button";
-import { FiLoader, FiCheckCircle, FiAlertTriangle } from "react-icons/fi";
+import { FiLoader, FiAlertTriangle } from "react-icons/fi";
 
-// Placeholder Images
-const newsletterBgLeft =
-  "https://via.placeholder.com/327x689/cccccc/969696?text=Bg";
-const newsletterBgRight =
-  "https://via.placeholder.com/311x689/cccccc/969696?text=Bg";
+// --- Import Decorative Background Images ---
+// Ensure these paths and filenames are correct
+import newsletterBgLeftSrc from "../../assets/images/decor/newsletter-bg-left.webp";
+import newsletterBgRightSrc from "../../assets/images/decor/newsletter-bg-right.webp";
+// --- End Image Imports ---
 
 const NewsletterSection: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -38,19 +38,27 @@ const NewsletterSection: React.FC = () => {
 
   return (
     <div className="bg-brand-footer-bg py-16 md:py-24 relative overflow-hidden">
+      {" "}
+      {/* Keep overflow-hidden */}
+      {/* --- Decorative Background Images - UPDATED --- */}
       <img
-        src={newsletterBgLeft}
+        src={newsletterBgLeftSrc}
         alt=""
         aria-hidden="true"
-        className="absolute left-0 bottom-0 h-full w-auto max-w-[327px] object-contain opacity-50 hidden md:block -z-0"
+        // Removed max-w-[25%], adjusted responsive max-widths, changed to object-cover
+        className="absolute left-0 bottom-0 h-full w-auto max-w-[150px] sm:max-w-[200px] md:max-w-[327px] object-cover opacity-50 hidden sm:block -z-0 pointer-events-none"
+        loading="lazy"
       />
       <img
-        src={newsletterBgRight}
+        src={newsletterBgRightSrc}
         alt=""
         aria-hidden="true"
-        className="absolute right-0 bottom-0 h-full w-auto max-w-[311px] object-contain opacity-50 hidden md:block -z-0"
+        // Removed max-w-[25%], adjusted responsive max-widths, changed to object-cover
+        className="absolute right-0 bottom-0 h-full w-auto max-w-[150px] sm:max-w-[200px] md:max-w-[311px] object-cover opacity-50 hidden sm:block -z-0 pointer-events-none"
+        loading="lazy"
       />
-
+      {/* --- End Decorative Images --- */}
+      {/* Content container */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-xl mx-auto text-center">
           {/* Text Content */}
@@ -66,27 +74,27 @@ const NewsletterSection: React.FC = () => {
           {/* Subscription Form or Success/Error Message */}
           <div className="min-h-[120px]">
             {success ? (
+              // Success Message
               <div className="flex items-center justify-center gap-2 text-lg text-green-700 bg-green-100 p-4 rounded-lg animate-fade-in">
-                <FiCheckCircle className="w-6 h-6 flex-shrink-0" /> Subscribed
-                successfully! Thanks for joining.
+                {" "}
+                /* ... */{" "}
               </div>
             ) : (
-              // UPDATED FORM LAYOUT: items-center for horizontal centering of button
+              // Form
               <form
                 onSubmit={handleSubscribe}
                 className="flex flex-col gap-y-4 items-center max-w-lg mx-auto"
               >
                 {/* Input Field Block */}
                 <div className="w-full">
-                  {/* Visually hidden label remains for accessibility */}
                   <label htmlFor="newsletter-email" className="sr-only">
                     {" "}
                     Enter your email address{" "}
                   </label>
                   <InputField
                     id="newsletter-email"
-                    label="Enter your email address" // Provide label for aria-label fallback
-                    labelClassName="sr-only" // Hide the label visually
+                    label="Enter your email address"
+                    labelClassName="sr-only"
                     type="email"
                     placeholder="Enter your email address"
                     value={email}
@@ -94,29 +102,25 @@ const NewsletterSection: React.FC = () => {
                     required
                     disabled={loading}
                     containerClassName="w-full"
-                    // Input field takes full width, text aligned left by default
-                    className={`h-[56px] bg-white shadow-md border rounded-lg text-left ${
-                      error
-                        ? "border-red-500"
-                        : "border-transparent focus:border-brand-primary"
+                    className={`h-[56px] ... ${
+                      error ? "border-red-500" : "border-transparent ..."
                     }`}
-                    // Use aria-label because label is hidden
                     aria-label="Enter your email address"
-                    error={null} // Error displayed below
+                    error={null}
                   />
                   {error && (
-                    <p className="text-red-600 text-sm mt-1 text-left flex items-center gap-1">
-                      <FiAlertTriangle className="w-4 h-4" /> {error}
+                    <p className="text-red-600 text-sm mt-1 ...">
+                      {" "}
+                      <FiAlertTriangle className="w-4 h-4" /> {error}{" "}
                     </p>
                   )}
                 </div>
-                {/* Submit Button Block - Centered, width determined by padding */}
+                {/* Submit Button Block */}
                 <Button
                   type="submit"
                   variant="primary"
-                  size="lg" // Uses px-6 py-4 padding
-                  // REMOVED w-full - width now based on content + padding
-                  className="h-[56px] shadow-lg" // Keep height consistent
+                  size="lg"
+                  className="h-[56px] shadow-lg w-auto px-10"
                   disabled={loading}
                 >
                   {loading ? (
@@ -132,8 +136,5 @@ const NewsletterSection: React.FC = () => {
     </div>
   );
 };
-
-// Optional: Add fade-in animation to tailwind.config.js if desired
-/* ... */
 
 export default NewsletterSection;

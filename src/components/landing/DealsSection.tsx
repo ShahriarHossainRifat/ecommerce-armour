@@ -1,6 +1,6 @@
 // src/components/landing/DealsSection.tsx
-import React, { useState, useEffect, useRef, useCallback } from "react";
-// --- Import Swiper ---
+import React, { useState, useRef, useCallback } from "react";
+// Swiper imports
 import { Swiper, SwiperSlide, SwiperRef } from "swiper/react";
 import {
   Navigation,
@@ -8,23 +8,17 @@ import {
   Autoplay,
   EffectCoverflow,
 } from "swiper/modules";
-
-// --- Import Swiper styles ---
+// Swiper styles (ensure swiper-css.d.ts exists)
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
-
-// --- Other Imports ---
+// Other imports
 import Timer from "../ui/Timer";
 import Button from "../ui/Button";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-// *** VERIFY THIS IMPORT PATH IS CORRECT RELATIVE TO THIS FILE ***
-// It expects src/data/deals.ts relative to src/components/landing/DealsSection.tsx
-import { DealItem, dealsData } from "../../data/deals";
-
-// --- Animation Variants (Optional, Swiper handles main effect) ---
-// const sliderVariants = { /* ... */ };
+// Data and Types (ensure paths are correct)
+import { dealsData } from "../../data/deals";
 
 const AUTOPLAY_DELAY = 4000;
 
@@ -33,12 +27,7 @@ const DealsSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const hasInteracted = useRef(false);
 
-  // Ensure dealsData is defined before calculating length/activeDeal
-  const totalDeals = dealsData?.length ?? 0;
-  const activeDeal =
-    totalDeals > 0 ? dealsData[activeIndex % totalDeals] : null; // Handle empty data case
-
-  // --- Autoplay Logic ---
+  // Autoplay control functions
   const stopAutoplay = useCallback(() => {
     swiperRef.current?.swiper?.autoplay?.stop();
   }, []);
@@ -47,12 +36,8 @@ const DealsSection: React.FC = () => {
       swiperRef.current?.swiper?.autoplay?.start();
     }
   }, []);
-  useEffect(() => {
-    /* Autoplay managed by Swiper config */
-  }, []); // Keep empty or remove
-  // --- End Autoplay Logic ---
 
-  // --- Navigation Handlers ---
+  // Navigation Handlers
   const handlePrev = useCallback(() => {
     hasInteracted.current = true;
     stopAutoplay();
@@ -72,21 +57,23 @@ const DealsSection: React.FC = () => {
     },
     [activeIndex, stopAutoplay]
   );
-  // --- End Navigation Handlers ---
 
+  // Timer date
   const saleEndDate = new Date();
   saleEndDate.setDate(saleEndDate.getDate() + 2);
 
-  // Don't render section if no deal data
-  if (!activeDeal) {
-    return null; // Or some placeholder
+  // Don't render if no data (or handle loading state if data is async)
+  if (!dealsData || dealsData.length === 0) {
+    // Optionally return a placeholder or null
+    return null;
   }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
       <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 xl:gap-16">
-        {/* Left Side: Text, Timer, Button */}
+        {/* Left Side */}
         <div className="lg:w-2/5 text-center lg:text-left flex-shrink-0 order-last lg:order-first">
+          {/* ... Title, Description, Buy Now Button, Timer ... */}
           <h2 className="text-3xl lg:text-4xl font-semibold text-brand-dark-alt mb-4">
             {" "}
             Deals Of The Month{" "}
@@ -131,56 +118,52 @@ const DealsSection: React.FC = () => {
               effect={"coverflow"}
               grabCursor={true}
               centeredSlides={true}
-              slidesPerView={"auto"}
-              loop={true}
+              slidesPerView={"auto"} // Show partial prev/next slides
+              loop={true} // Enable looping
               coverflowEffect={{
-                rotate: 25,
-                stretch: -10,
+                rotate: 20,
+                stretch: -10, // Negative value creates overlap/closer slides
                 depth: 100,
                 modifier: 1,
-                slideShadows: false,
+                slideShadows: false, // Disable default shadows
               }}
               autoplay={{
                 delay: AUTOPLAY_DELAY,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
+                disableOnInteraction: true, // Stop autoplay after user interaction
+                pauseOnMouseEnter: true, // Swiper handles pause on hover
               }}
+              // Update state based on Swiper's 'realIndex' for loop compatibility
               onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
               className="h-full w-full"
             >
-              {/* Explicitly type 'deal' parameter if inference fails after fixing import */}
-              {dealsData.map((deal: DealItem) => (
+              {dealsData.map((deal) => (
+                // Set slide width and add group class for Tailwind variant
                 <SwiperSlide
                   key={deal.id}
                   style={{ width: "70%", maxWidth: "334px" }}
+                  className="!flex items-center justify-center group"
                 >
-                  {({ isActive }) => (
-                    <div
-                      className={`relative w-full h-full rounded-xl overflow-hidden transition-all duration-300 ease-out ${
-                        isActive
-                          ? "scale-100 opacity-100"
-                          : "scale-85 md:scale-90 opacity-60"
-                      }`}
-                    >
-                      {/* Access properties safely now */}
-                      <img
-                        src={deal.imageUrl}
-                        alt={deal.altText}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      {isActive && (
-                        <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-sm rounded-lg p-3 md:p-4 shadow-md text-left w-auto max-w-[180px]">
-                          <p className="text-xs md:text-sm text-brand-gray-dark">
-                            {deal.tagline}
-                          </p>
-                          <p className="text-xl md:text-2xl font-bold text-brand-gray-dark">
-                            {deal.discount}
-                          </p>
-                        </div>
-                      )}
+                  {/* No render prop needed here */}
+                  {/* Inner div: Apply inactive styles by default, use group variant for active */}
+                  <div
+                    className={`relative w-full h-full rounded-xl overflow-hidden transition-all duration-300 ease-out scale-85 opacity-60 group-[.swiper-slide-active]:scale-100 group-[.swiper-slide-active]:opacity-100`}
+                  >
+                    <img
+                      src={deal.imageUrl}
+                      alt={deal.altText}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    {/* Discount Overlay: Conditionally display based on group active state */}
+                    <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-sm rounded-lg p-3 md:p-4 shadow-md text-left w-auto max-w-[180px] hidden group-[.swiper-slide-active]:block">
+                      <p className="text-xs md:text-sm text-brand-gray-dark">
+                        {deal.tagline}
+                      </p>
+                      <p className="text-xl md:text-2xl font-bold text-brand-gray-dark">
+                        {deal.discount}
+                      </p>
                     </div>
-                  )}
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -199,12 +182,12 @@ const DealsSection: React.FC = () => {
             </button>
             {/* Pagination Dots */}
             <div className="flex items-center space-x-2 h-3">
-              {/* Explicitly type parameters if needed */}
-              {dealsData.map((_: DealItem, index: number) => (
+              {dealsData.map((_, index) => (
                 <button
                   key={`deal-dot-${index}`}
                   onClick={() => handleDotClick(index)}
                   className={`transition-all duration-300 ease-in-out rounded-full ${
+                    // Use activeIndex state for styling
                     activeIndex === index
                       ? "w-5 h-2 bg-brand-primary"
                       : "w-2 h-2 bg-gray-300 hover:bg-gray-400"
