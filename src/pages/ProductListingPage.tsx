@@ -7,9 +7,9 @@ import React, {
   useCallback,
 } from "react";
 import { useSearchParams } from "react-router-dom";
-// *** ENSURE THESE IMPORT PATHS ARE CORRECT FOR YOUR PROJECT ***
-import { Product } from "../types/product"; // Adjust path if needed
-import { ALL_PRODUCTS_MOCK } from "../data/products"; // Adjust path if needed
+// *** ENSURE THESE IMPORT PATHS ARE CORRECT ***
+import { Product } from "../types/product";
+import { ALL_PRODUCTS_MOCK } from "../data/products";
 // Import Components
 import Breadcrumbs from "../components/common/Breadcrumbs";
 import FiltersSidebar from "../components/common/plp/FiltersSidebar"; // Using path user specified
@@ -23,16 +23,16 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 
-const ITEMS_PER_PAGE = 12; // Number of products per page
+const ITEMS_PER_PAGE = 12; // Adjust items per page as needed
 
-// Helper function to safely parse integers from URL params
+// Helper function to safely parse numbers from URL params
 const safeParseInt = (value: string | null, defaultValue: number): number => {
   if (value === null) return defaultValue;
   const parsed = parseInt(value, 10);
-  return isNaN(parsed) || parsed < 1 ? defaultValue : parsed;
+  return isNaN(parsed) || parsed < 1 ? defaultValue : parsed; // Ensure positive page number
 };
 
-// Define structure for the filter state object
+// Define Filter State Type for clarity
 interface FilterState {
   category?: string | null;
   tag?: string | null;
@@ -44,32 +44,30 @@ interface FilterState {
   collections: string[];
 }
 
-// Centralized function to filter and sort products (can be moved to utils.ts)
+// Centralized function to filter and sort products based on current state
 const filterAndSortProducts = (
   products: Product[],
   filters: FilterState,
   sort: string
 ): Product[] => {
-  console.log("Running filterAndSortProducts with:", filters, sort);
+  console.log("Filtering/Sorting with:", filters, sort);
   let results = [...products];
-  // Apply Filters (with checks for optional properties)
+  // --- Apply Filters Safely ---
   try {
     if (filters.category) {
-      const fLower = filters.category.trim().toLowerCase();
-      results = results.filter(
-        (p) => p.category?.trim().toLowerCase() === fLower
-      );
+      const f = filters.category.trim().toLowerCase();
+      results = results.filter((p) => p.category?.trim().toLowerCase() === f);
     }
     if (filters.subCategory) {
-      const fLower = filters.subCategory.trim().toLowerCase();
+      const f = filters.subCategory.trim().toLowerCase();
       results = results.filter(
-        (p) => p.subCategory?.trim().toLowerCase() === fLower
+        (p) => p.subCategory?.trim().toLowerCase() === f
       );
     }
     if (filters.tag) {
-      const fLower = filters.tag.trim().toLowerCase();
-      results = results.filter((p) =>
-        p.tags?.some((t) => t.trim().toLowerCase() === fLower)
+      const f = filters.tag.trim().toLowerCase();
+      results = results.filter(
+        (p) => p.tags && p.tags.some((t) => t.trim().toLowerCase() === f)
       );
     }
     results = results.filter(
@@ -78,17 +76,17 @@ const filterAndSortProducts = (
     );
     if (filters.brands.length > 0) {
       results = results.filter(
-        (p) => !!p.brand && filters.brands.includes(p.brand)
+        (p) => p.brand && filters.brands.includes(p.brand)
       );
     }
     if (filters.sizes.length > 0) {
       results = results.filter(
-        (p) => !!p.sizes && p.sizes.some((s) => filters.sizes.includes(s))
+        (p) => p.sizes && p.sizes.some((s) => filters.sizes.includes(s))
       );
     }
     if (filters.colors.length > 0) {
       results = results.filter(
-        (p) => !!p.colors && p.colors.some((c) => filters.colors.includes(c))
+        (p) => p.colors && p.colors.some((c) => filters.colors.includes(c))
       );
     }
     const activeCollections = filters.collections.filter((c) => c !== "all");
@@ -103,9 +101,8 @@ const filterAndSortProducts = (
   } catch (e) {
     console.error("Error during filtering:", e);
     return products;
-  } // Return unfiltered on error
-
-  // Apply Sorting
+  }
+  // --- Apply Sorting ---
   try {
     switch (sort) {
       case "price-asc":
@@ -124,20 +121,20 @@ const filterAndSortProducts = (
         results.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
         break;
       default:
-        break; // Keep original order if sort is 'default'
+        break;
     }
   } catch (e) {
     console.error("Error during sorting:", e);
   }
   console.log("Filtered/Sorted Results Count:", results.length);
-  return results;
+  return results; // Return final results
 };
 
 const ProductListingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // --- Component State ---
-  // Initialized ONCE from URL params using initializer functions
+  // --- State ---
+  // Initialize state ONCE from URL params using initializer functions
   const [currentPage, setCurrentPage] = useState(() =>
     safeParseInt(searchParams.get("page"), 1)
   );
@@ -163,7 +160,7 @@ const ProductListingPage: React.FC = () => {
       max: safeParseInt(searchParams.get("maxPrice"), 1000),
     })
   );
-  // State specifically derived from URL (category, subCategory, tag)
+  // State specifically derived from URL params initially, but can be updated
   const [selectedCategory, setSelectedCategory] = useState<string | null>(() =>
     searchParams.get("category")
   );
@@ -174,17 +171,21 @@ const ProductListingPage: React.FC = () => {
     searchParams.get("tag")
   );
 
-  // Loading/Error state (mainly for potential async operations later)
-  const [loading] = useState(false);
-  const [error] = useState<string | null>(null);
-  // Ref to track if component has finished its initial mounting and state setup
-  const isMounted = useRef(false);
+  const [loading] = useState(false); // Example loading state
+  const [error] = useState<string | null>(null); // Example error state
+  const isMounted = useRef(false); // Track initial mount vs subsequent updates
   // --- End State ---
 
-  // --- Effect to Sync State FROM URL (Runs on initial load & back/forward nav) ---
+  // --- Effect to Update Component State FROM URL Changes (e.g., back/forward) ---
   useEffect(() => {
-    console.log("Effect [searchParams]: Running.", searchParams.toString());
-    // Update state to match URL params
+    // Don't run on initial render because useState initializers already read URL
+    if (!isMounted.current) return;
+
+    console.log(
+      "Effect [searchParams]: Syncing state FROM URL Search Params:",
+      searchParams.toString()
+    );
+    // Update state based on current URL params
     setSelectedBrands(searchParams.getAll("brand") || []);
     setSelectedCollections(searchParams.getAll("collection") || ["all"]);
     setSelectedSizes(searchParams.getAll("size") || []);
@@ -198,19 +199,16 @@ const ProductListingPage: React.FC = () => {
     setSelectedTag(searchParams.get("tag") || null);
     setSortOption(searchParams.get("sort") || "default");
     setCurrentPage(safeParseInt(searchParams.get("page"), 1));
+  }, [searchParams]); // Run ONLY when searchParams reference changes
 
-    // Mark initial render/sync complete after the first run
-    isMounted.current = true;
-  }, [searchParams]); // IMPORTANT: Only depends on searchParams
-
-  // --- Effect to Update URL FROM State (Runs after state changes post-mount) ---
+  // --- Effect to Update URL FROM State Changes ---
   useEffect(() => {
-    // Do not update URL during the initial render cycle
+    // Skip the very first render cycle
     if (!isMounted.current) return;
 
     console.log("Effect [State Change]: Updating URL from state");
     const newParams = new URLSearchParams();
-    // Build query params string from current state
+    // Build query params string from current state...
     if (selectedCategory) newParams.set("category", selectedCategory);
     if (selectedSubCategory) newParams.set("subCategory", selectedSubCategory);
     if (selectedTag) newParams.set("tag", selectedTag);
@@ -226,12 +224,13 @@ const ProductListingPage: React.FC = () => {
     if (sortOption !== "default") newParams.set("sort", sortOption);
     if (currentPage !== 1) newParams.set("page", String(currentPage));
 
-    // Only call setSearchParams if the params actually changed to avoid potential loops
+    // Use replace to keep browser history clean during filtering/paging
+    // Only update if params actually changed (optional optimization)
     if (newParams.toString() !== searchParams.toString()) {
       setSearchParams(newParams, { replace: true });
     }
 
-    // Depend on all state variables that should be reflected in the URL
+    // Depend on all state variables that influence the URL
   }, [
     selectedBrands,
     selectedCollections,
@@ -244,11 +243,10 @@ const ProductListingPage: React.FC = () => {
     sortOption,
     currentPage,
     setSearchParams,
-  ]); // Removed searchParams from here
+  ]);
 
   // --- Filtering and Sorting (Memoized based on State) ---
   const filteredAndSortedProducts = useMemo(() => {
-    // Filters are based on the current state variables
     const currentFilters: FilterState = {
       category: selectedCategory,
       tag: selectedTag,
@@ -270,24 +268,33 @@ const ProductListingPage: React.FC = () => {
     selectedSubCategory,
     selectedTag,
     sortOption,
-  ]); // Depend on state filters/sort
+  ]);
 
   // --- Scroll to Top on Page Change ---
   useEffect(() => {
+    // Avoid scroll on initial render when page might be > 1 from URL
     if (isMounted.current) {
-      // Avoid scroll on initial mount
       console.log(
         `Effect [currentPage Changed]: Scrolling to top for page ${currentPage}`
       );
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      try {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (error) {
+        console.error("PLP ScrollToTop failed:", error);
+      }
     }
   }, [currentPage]); // Trigger only when currentPage state changes
+
+  // --- Effect to mark initial render as done AFTER first render ---
+  useEffect(() => {
+    isMounted.current = true;
+  }, []);
 
   // --- Pagination Logic ---
   const totalProducts = filteredAndSortedProducts.length;
   const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
   const paginatedProducts = useMemo<Product[]>(() => {
-    // Calculate based on the *current* currentPage state
+    // Use current page state, ensure it's valid
     const validCurrentPage = Math.max(
       1,
       Math.min(currentPage, totalPages || 1)
@@ -319,20 +326,20 @@ const ProductListingPage: React.FC = () => {
     }
     if (items.length > 1) {
       items[items.length - 1].href = undefined;
-    } // Make last item non-clickable
+    }
     return items;
   }, [selectedCategory, selectedSubCategory, selectedTag]);
 
-  // --- Handlers to Update STATE Directly (which then trigger URL update effect) ---
+  // --- Handlers to Update STATE Directly ---
   const handlePageChange = useCallback(
     (newPage: number) => {
       if (newPage !== currentPage) {
         console.log(`Handler: Setting page state to ${newPage}`);
-        setCurrentPage(newPage); // Update state directly
+        setCurrentPage(newPage); // Update state -> triggers URL update effect
       }
     },
     [currentPage]
-  );
+  ); // Include currentPage in dependency
 
   const handleSortChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -340,13 +347,14 @@ const ProductListingPage: React.FC = () => {
       console.log(
         `Handler: Setting sort state to ${newSort} and resetting page`
       );
-      setSortOption(newSort);
-      setCurrentPage(1); // Reset page state directly when sorting changes
+      setSortOption(newSort); // Update sort state
+      setCurrentPage(1); // Reset page state DIRECTLY
+      // State change triggers URL update effect
     },
     []
-  );
+  ); // Only needs setters which are stable
 
-  // Filter Handlers - update state and reset page
+  // Filter handlers update state and reset page state directly
   const handleBrandChange = useCallback((brands: string[]) => {
     setSelectedBrands(brands);
     setCurrentPage(1);
@@ -382,7 +390,6 @@ const ProductListingPage: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Filters Sidebar */}
           <div className="w-full lg:w-1/4 xl:w-1/5 flex-shrink-0">
-            {/* Pass state values AND state-updating handlers */}
             <FiltersSidebar
               priceRange={priceRange}
               onPriceChange={handlePriceChange}
@@ -401,8 +408,6 @@ const ProductListingPage: React.FC = () => {
             {/* Top Bar */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-gray-200 gap-4">
               <div className="flex items-center gap-2">
-                {" "}
-                {/* View Mode Buttons */}
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-2 rounded ${
@@ -431,8 +436,6 @@ const ProductListingPage: React.FC = () => {
                 </button>
               </div>
               <div className="text-sm text-brand-dark flex-shrink-0">
-                {" "}
-                {/* Result Count */}
                 Showing{" "}
                 {(currentPage - 1) * ITEMS_PER_PAGE +
                   (paginatedProducts.length > 0 ? 1 : 0)}
@@ -440,8 +443,6 @@ const ProductListingPage: React.FC = () => {
                 of {totalProducts} results
               </div>
               <div className="relative flex-shrink-0">
-                {" "}
-                {/* Sort Dropdown */}
                 <select
                   id="sort-by"
                   value={sortOption}
@@ -461,17 +462,17 @@ const ProductListingPage: React.FC = () => {
             </div>
 
             {/* Content Display */}
-            {error ? ( // Check Error state
+            {error ? (
               <div className="flex flex-col items-center justify-center h-64 text-center text-red-600 bg-red-50 p-6 rounded-lg">
                 <FiAlertTriangle className="text-4xl mb-3 mx-auto" />
                 <p className="font-semibold">Error:</p>
                 <p>{error}</p>
               </div>
-            ) : loading ? ( // Check Loading state (optional for sync filtering)
+            ) : loading ? ( // Show loading indicator if needed
               <div className="flex justify-center items-center h-96">
                 <FiLoader className="animate-spin text-brand-primary text-4xl" />
               </div>
-            ) : paginatedProducts.length > 0 ? ( // Check if results exist
+            ) : paginatedProducts.length > 0 ? (
               <>
                 <div
                   className={`grid gap-6 md:gap-8 ${
@@ -488,7 +489,6 @@ const ProductListingPage: React.FC = () => {
                     />
                   ))}
                 </div>
-                {/* Pagination Component */}
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
@@ -499,7 +499,6 @@ const ProductListingPage: React.FC = () => {
                 )}
               </>
             ) : (
-              // Empty state if no errors and no results
               <div className="text-center py-16 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                 <p className="text-xl text-brand-gray-dark">
                   No products match your current filters.

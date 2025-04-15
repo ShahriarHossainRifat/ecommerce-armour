@@ -1,7 +1,7 @@
 // src/components/common/MobileMenuDrawer.tsx
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-// Ensure you have installed react-icons: npm install react-icons
+import logSrc from "../../assets/images/armour-logo.svg";
 import {
   FiX,
   FiHome,
@@ -19,7 +19,7 @@ import { useAuth } from "../../contexts/AuthContext"; // Import Auth context hoo
 import { mobileCategories } from "../../data/navigation"; // Import category data specific for mobile view
 
 // Placeholder Logo URL - Replace with your actual logo import or path
-const logoUrl = "https://via.placeholder.com/208x42/cccccc/969696?text=Armour";
+const logoUrl = logSrc;
 
 interface MobileMenuDrawerProps {
   isOpen: boolean;
