@@ -1,8 +1,8 @@
 // src/components/pdp/ProductTabs.tsx
 import React from "react";
-import { Product, Review } from "../../types/product"; // Adjusted import path (import Review too if needed here)
+// *** ENSURE THESE IMPORT PATHS ARE CORRECT ***
+import { Product, Review } from "../../types/product"; // Import Product and Review types
 import Tabs from "../ui/Tabs"; // Import the reusable Tabs component
-
 // Import Tab Content Components
 import DetailsTabContent from "./tabs/DetailsTabContent";
 import VideosTabContent from "./tabs/VideosTabContent";
@@ -10,32 +10,42 @@ import ReviewsTabContent from "./tabs/ReviewsTabContent";
 import ShippingTabContent from "./tabs/ShippingTabContent";
 
 interface ProductTabsProps {
-  product: Product; // Use the correctly imported Product type
+  product: Product; // Expects the full product object
 }
 
-// Placeholder Reviews Data (replace with actual data logic or remove if passed via product prop)
-const placeholderReviews: Review[] = [
+// --- Define Default / Placeholder Content ---
+const DEFAULT_DETAILS_TEXT = `This product combines quality materials with modern design principles. Suitable for various occasions, it offers both comfort and style.\n\nPlease refer to the size chart for accurate fitting. Care instructions: Machine wash cold, tumble dry low or hang dry. Material composition available upon request.`;
+
+const DEFAULT_SHIPPING_POLICY = `We offer standard shipping (5-7 business days) and expedited shipping (2-3 business days) options within the country.\n\nReturns are accepted within 30 days of purchase, provided the item is in its original condition with tags attached. Please visit our Returns Center page for more details or contact customer support to initiate a return. Final sale items are not eligible for return.`;
+
+// Example Sample Reviews (Can be expanded)
+const sampleReviews: Review[] = [
   {
-    id: 1,
-    author: "John Malcolm",
-    date: "24 January, 2025",
-    rating: 4,
-    text: "In Washington, it is already difficult to surprise...",
-    imageUrl: "https://via.placeholder.com/56x56/cccccc/969696?text=JM",
+    id: "r1",
+    author: "Satisfied Customer",
+    date: "April 10, 2025",
+    rating: 5,
+    text: "Great quality and exactly as described. Fit perfectly based on the size chart provided. Shipping was reasonably fast too!",
   },
   {
-    id: 2,
-    author: "Jane Doe",
-    date: "15 January, 2025",
-    rating: 5,
-    text: "Absolutely love this product! Great quality...",
-    imageUrl: "https://via.placeholder.com/56x56/cccccc/969696?text=JD",
-    images: [
-      "https://via.placeholder.com/88x88/cccccc/969696?text=ReviewImg1",
-      "https://via.placeholder.com/88x88/cccccc/969696?text=ReviewImg2",
-    ],
+    id: "r2",
+    author: "Alex P.",
+    date: "April 05, 2025",
+    rating: 4,
+    text: "Really like this item! The color is slightly different than online but still looks good. Comfortable material.",
+    imageUrl: "https://via.placeholder.com/56x56/cccccc/808080?text=AP",
+  },
+  {
+    id: "r3",
+    author: "Sam B.",
+    date: "March 28, 2025",
+    rating: 4,
+    text: "Good value for the price point. Does the job well.",
+    imageUrl: null,
   },
 ];
+
+// Example Rating Distribution (Replace with actual calculation if possible)
 const placeholderRatingDistribution = {
   excellent: 156,
   good: 45,
@@ -43,75 +53,63 @@ const placeholderRatingDistribution = {
   belowAverage: 2,
   poor: 2,
 };
-const placeholderTotalReviews = placeholderReviews.length;
-const placeholderOverallRating = 4.5;
-// --- End Placeholder Data ---
+// --- End Default Content ---
 
 const ProductTabs: React.FC<ProductTabsProps> = ({ product }) => {
-  // Define tabs data, accessing properties from the 'product' prop
-  // Use nullish coalescing (??) to provide default fallbacks for optional properties
+  // Use product-specific data if available, otherwise use defaults
+  const detailsText = product.detailsText || DEFAULT_DETAILS_TEXT;
+  const videoUrl = product.videoUrl; // Will be null/undefined if not present
+  const reviews = product.reviews || sampleReviews; // Use sample reviews as fallback
+  const shippingPolicy = product.shippingPolicy || DEFAULT_SHIPPING_POLICY;
+  const overallRating = product.rating ?? 4.5; // Use product rating or a default
+  const totalReviews = product.reviewCount ?? reviews.length; // Use product count or count of samples
+
+  // Define tabs, passing the resolved content to each tab component
   const tabsData = [
     {
       label: "Details",
-      // Assuming 'detailsText' holds the main description for this tab
-      content: (
-        <DetailsTabContent
-          description={product.detailsText ?? "No details available."}
-        />
-      ),
+      content: <DetailsTabContent description={detailsText} />,
     },
     {
       label: "Videos",
-      // Pass 'description' (short one) and 'videoUrl' if they exist
+      // VideosTabContent already handles null/undefined videoUrl
       content: (
         <VideosTabContent
-          videoUrl={product.videoUrl}
+          videoUrl={videoUrl}
           description={product.description}
         />
       ),
     },
     {
       label: "Reviews",
-      // Pass relevant data; use fallbacks like empty array [] for optional reviews
       content: (
         <ReviewsTabContent
-          productId={product.id} // id is required, safe to access
-          overallRating={product.rating ?? placeholderOverallRating} // Use product rating or fallback
-          totalReviews={product.reviewCount ?? placeholderTotalReviews} // Use product review count or fallback
-          ratingDistribution={placeholderRatingDistribution} // Use placeholder or pass actual data if available on product
-          reviews={product.reviews ?? placeholderReviews} // Use actual product reviews or fallback
+          productId={product.id}
+          overallRating={overallRating}
+          totalReviews={totalReviews}
+          // Pass placeholder distribution or calculate if possible
+          ratingDistribution={placeholderRatingDistribution}
+          reviews={reviews} // Pass actual or sample reviews
         />
       ),
     },
     {
       label: "Shipping & Return",
-      // Use 'shippingPolicy' if it exists
-      content: (
-        <ShippingTabContent
-          policyText={
-            product.shippingPolicy ?? "No shipping information available."
-          }
-        />
-      ),
+      content: <ShippingTabContent policyText={shippingPolicy} />,
     },
   ];
 
   return (
     <div className="bg-brand-footer-bg py-12 md:py-16">
-      {" "}
-      {/* Container with background */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white p-6 md:p-10 rounded-lg shadow-sm">
-          {" "}
-          {/* Inner white card */}
           <Tabs
             tabs={tabsData}
-            // Customizing tab styles to match the PDP CSS examples
             tabListClassName="flex flex-wrap gap-x-8 gap-y-2 mb-8 border-b border-gray-200"
-            tabButtonClassName="pb-3 text-2xl lg:text-[32px] font-semibold tracking-tight transition-colors duration-200 whitespace-nowrap" // Larger font size
-            activeTabButtonClassName="text-brand-dark-alt border-b-2 border-brand-dark-alt" // Active style from CSS
-            inactiveTabButtonClassName="text-brand-gray hover:text-brand-dark-alt" // Inactive style from CSS
-            tabPanelClassName="mt-8" // Spacing for content panel
+            tabButtonClassName="pb-3 text-2xl lg:text-[32px] font-semibold tracking-tight transition-colors duration-200 whitespace-nowrap"
+            activeTabButtonClassName="text-brand-dark-alt border-b-2 border-brand-dark-alt"
+            inactiveTabButtonClassName="text-brand-gray hover:text-brand-dark-alt"
+            tabPanelClassName="mt-8"
           />
         </div>
       </div>

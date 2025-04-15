@@ -1,63 +1,57 @@
 // src/components/common/Footer.tsx
 import React from "react";
 import { Link } from "react-router-dom";
-import logoSrc from '../../assets/images/armour-logo.svg';
-// Ensure you have react-icons installed: npm install react-icons
+// Ensure you have installed react-icons: npm install react-icons
 import {
   FaFacebookF,
   FaYoutube,
   FaInstagram,
   FaLinkedinIn,
 } from "react-icons/fa";
-import { FiPhone, FiMail, FiMapPin } from "react-icons/fi"; // Using different icons for contact
+import { FiPhone, FiMail, FiMapPin } from "react-icons/fi"; // Using consistent icons
 import Button from "../ui/Button"; // Import Button component
-
-// Placeholder Logo URL - Replace with your actual logo import or path
+// *** ENSURE THIS IMPORT PATH IS CORRECT ***
+import logoSrc from "../../assets/images/armour-logo.svg"; // Import your logo
 
 const Footer: React.FC = () => {
   return (
-    // Use the background color defined for the footer/newsletter sections
-    <footer className="bg-brand-footer-bg pt-16 pb-8 md:pt-24">
-      {" "}
-      {/* Increased top padding */}
+    // Footer container: White background, padding, top border for separation
+    <footer className="bg-white pt-16 pb-8 md:pt-20 border-t border-gray-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* --- Request More Information Section --- */}
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
-          {/* Subtitle */}
           <p className="text-sm uppercase tracking-[2.8px] text-brand-dark opacity-60 mb-4 font-sans">
             UPSKILL FOR A BETTER {/* Text from CSS */}
           </p>
-          {/* Title */}
           <h2 className="text-4xl md:text-5xl font-bold text-brand-dark-alt mb-5 font-sans leading-tight">
             Request More Information
           </h2>
-          {/* Description */}
           <p className="text-lg text-brand-dark opacity-80 mb-10 font-sans leading-relaxed">
-            {/* Text from CSS (assuming it was 'Bostel Technologies, ...') - Replace with actual text */}
+            {/* Replace with actual description */}
             Providing comprehensive solutions for your business needs. Contact
             us to learn more about how we can help you achieve your goals.
           </p>
-          {/* Contact Button */}
           <Button
-            to="/contact" // Link to your contact page
+            to="/contact" // Link to contact page
             variant="primary"
             size="lg"
-            // Apply specific styles from CSS: rounded-full, custom padding, shadow
-            className="!rounded-full h-auto px-10 py-3 md:py-4 shadow-lg text-xl font-sans" // Use ! to override default Button rounding if needed
+            // Apply specific styles: rounded-full, custom padding/height, shadow
+            className="!rounded-full h-auto px-10 py-3 md:py-4 shadow-lg text-xl font-sans"
           >
             Contact Us
           </Button>
         </div>
-        {/* --- END Request More Information Section --- */}
+        {/* --- END Request Info Section --- */}
 
         {/* --- Footer Link Columns --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Column 1: Product Links */}
+          {/* Column 1: Product */}
           <div>
             <h4 className="text-2xl font-semibold text-brand-dark-alt mb-4 font-sans">
               Product
             </h4>
             <ul className="space-y-3">
+              {/* Add actual links if available */}
               <li>
                 <Link
                   to="#"
@@ -108,7 +102,7 @@ const Footer: React.FC = () => {
               </li>
             </ul>
           </div>
-          {/* Column 2: Information Links */}
+          {/* Column 2: Information */}
           <div>
             <h4 className="text-2xl font-semibold text-brand-dark-alt mb-4 font-sans">
               Information
@@ -138,9 +132,11 @@ const Footer: React.FC = () => {
                   Support
                 </Link>
               </li>
+              {/* Support seemed duplicated in original CSS, verify if needed */}
+              {/* <li><Link to="/support-alt" className="text-xl text-brand-blue-dark opacity-70 hover:opacity-100 transition-colors">Support</Link></li> */}
             </ul>
           </div>
-          {/* Column 3: Company Links */}
+          {/* Column 3: Company */}
           <div>
             <h4 className="text-2xl font-semibold text-brand-dark-alt mb-4 font-sans">
               Company
@@ -188,13 +184,21 @@ const Footer: React.FC = () => {
             <ul className="space-y-4">
               <li className="flex items-center gap-2.5 text-xl text-brand-blue-dark opacity-70">
                 <FiPhone className="flex-shrink-0 w-5 h-5" />{" "}
-                <span className="font-semibold break-all">01453625987</span>
+                <a
+                  href="tel:01453625987"
+                  className="font-semibold break-all hover:text-brand-primary"
+                >
+                  01453625987
+                </a>
               </li>
               <li className="flex items-center gap-2.5 text-xl text-brand-blue-dark opacity-70">
                 <FiMail className="flex-shrink-0 w-5 h-5" />{" "}
-                <span className="font-semibold break-all">
+                <a
+                  href="mailto:contact@armour.com"
+                  className="font-semibold break-all hover:text-brand-primary"
+                >
                   contact@armour.com
-                </span>
+                </a>
               </li>
               <li className="flex items-start gap-2.5 text-xl text-brand-gray-dark opacity-70">
                 <FiMapPin className="flex-shrink-0 w-5 h-5 mt-1" />
@@ -212,12 +216,13 @@ const Footer: React.FC = () => {
         {/* Divider */}
         <hr className="border-brand-dark-alt opacity-30 mb-8" />
 
-        {/* Bottom Row: Logo, Links, Social */}
+        {/* Bottom Row: Logo, Center Links, Social Icons */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          {/* Logo */}
           <Link to="/">
             <img className="h-[42px] w-auto" src={logoSrc} alt="Armour Logo" />
           </Link>
-          {/* Centered links */}
+          {/* Center Links */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-base font-semibold text-brand-dark-alt opacity-80">
             <Link to="#" className="hover:text-brand-primary transition-colors">
               Team
@@ -231,11 +236,10 @@ const Footer: React.FC = () => {
           </div>
           {/* Social Icons */}
           <div className="flex gap-3">
-            {/* Styling based on CSS social icons */}
             <a
               href="#"
               aria-label="LinkedIn"
-              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 transition-colors text-brand-dark-alt"
+              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 hover:border-brand-primary transition-colors text-brand-dark-alt hover:text-brand-primary"
             >
               {" "}
               <FaLinkedinIn size={20} />{" "}
@@ -243,7 +247,7 @@ const Footer: React.FC = () => {
             <a
               href="#"
               aria-label="Facebook"
-              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 transition-colors text-brand-dark-alt"
+              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 hover:border-brand-primary transition-colors text-brand-dark-alt hover:text-brand-primary"
             >
               {" "}
               <FaFacebookF size={20} />{" "}
@@ -251,7 +255,7 @@ const Footer: React.FC = () => {
             <a
               href="#"
               aria-label="Instagram"
-              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 transition-colors text-brand-dark-alt"
+              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 hover:border-brand-primary transition-colors text-brand-dark-alt hover:text-brand-primary"
             >
               {" "}
               <FaInstagram size={20} />{" "}
@@ -259,7 +263,7 @@ const Footer: React.FC = () => {
             <a
               href="#"
               aria-label="YouTube"
-              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 transition-colors text-brand-dark-alt"
+              className="w-11 h-11 flex items-center justify-center border-2 border-brand-dark-alt border-opacity-10 rounded-full hover:bg-gray-200 hover:border-brand-primary transition-colors text-brand-dark-alt hover:text-brand-primary"
             >
               {" "}
               <FaYoutube size={20} />{" "}
@@ -269,7 +273,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="text-center mt-8 text-base font-semibold text-brand-dark-alt opacity-80">
-          © {new Date().getFullYear()} Armour, LLC
+          © {new Date().getFullYear()} Armour, LLC {/* Or your client's name */}
         </div>
       </div>
     </footer>

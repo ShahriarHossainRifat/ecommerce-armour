@@ -13,6 +13,7 @@ import {
 import MegaMenu from "./MegaMenu";
 import MiniCart from "./MiniCart";
 import MobileMenuDrawer from "./MobileMenuDrawer";
+import SearchModal from "./SearchModal";
 import Button from "../ui/Button";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -22,6 +23,7 @@ const Navbar: React.FC = () => {
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const { itemCount } = useCart();
   const { isAuthenticated } = useAuth();
@@ -33,6 +35,7 @@ const Navbar: React.FC = () => {
     setIsMobileMenuOpen(false);
     setIsMiniCartOpen(false);
     setIsMegaMenuOpen(false);
+    setIsSearchModalOpen(false);
   }, [location]);
 
   // Toggle functions
@@ -40,6 +43,8 @@ const Navbar: React.FC = () => {
   const closeMiniCart = () => setIsMiniCartOpen(false);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prevState) => !prevState);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleSearchModal = () =>
+    setIsSearchModalOpen((prevState) => !prevState);
 
   // General handler to close menus on link clicks
   const handleLinkClick = () => {
@@ -179,6 +184,7 @@ const Navbar: React.FC = () => {
                 size="icon"
                 className="text-brand-dark-alt hover:text-brand-primary hidden sm:inline-flex"
                 aria-label="Search"
+                onClick={toggleSearchModal}
               >
                 {" "}
                 <FiSearch className="h-6 w-6" />{" "}
@@ -263,6 +269,9 @@ const Navbar: React.FC = () => {
         {" "}
         <MiniCart onClose={closeMiniCart} />{" "}
       </div>
+
+      {/* *** Render Search Modal Conditionally *** */}
+      <SearchModal isOpen={isSearchModalOpen} onClose={toggleSearchModal} />
     </>
   );
 };

@@ -37,28 +37,28 @@ const NewsletterSection: React.FC = () => {
   };
 
   return (
+    // Keep the light gray background and overflow hidden for this section
     <div className="bg-brand-footer-bg py-16 md:py-24 relative overflow-hidden">
-      {" "}
-      {/* Keep overflow-hidden */}
       {/* --- Decorative Background Images - UPDATED --- */}
       <img
         src={newsletterBgLeftSrc}
         alt=""
         aria-hidden="true"
-        // Removed max-w-[25%], adjusted responsive max-widths, changed to object-cover
-        className="absolute left-0 bottom-0 h-full w-auto max-w-[150px] sm:max-w-[200px] md:max-w-[327px] object-cover opacity-50 hidden sm:block -z-0 pointer-events-none"
+        // Removed opacity-50, using object-cover, adjusted max-width values
+        className="absolute left-0 bottom-0 h-full w-auto max-w-[180px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[310px] object-cover opacity-100 hidden sm:block -z-0 pointer-events-none"
         loading="lazy"
       />
       <img
         src={newsletterBgRightSrc}
         alt=""
         aria-hidden="true"
-        // Removed max-w-[25%], adjusted responsive max-widths, changed to object-cover
-        className="absolute right-0 bottom-0 h-full w-auto max-w-[150px] sm:max-w-[200px] md:max-w-[311px] object-cover opacity-50 hidden sm:block -z-0 pointer-events-none"
+        // Removed opacity-50, using object-cover, adjusted max-width values
+        className="absolute right-0 bottom-0 h-full w-auto max-w-[180px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[310px] object-cover opacity-100 hidden sm:block -z-0 pointer-events-none"
         loading="lazy"
       />
       {/* --- End Decorative Images --- */}
-      {/* Content container */}
+
+      {/* Content container (relative, z-10 to be above background images) */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-xl mx-auto text-center">
           {/* Text Content */}
@@ -102,16 +102,16 @@ const NewsletterSection: React.FC = () => {
                     required
                     disabled={loading}
                     containerClassName="w-full"
-                    className={`h-[56px] ... ${
+                    className={`h-[56px] bg-white ... ${
                       error ? "border-red-500" : "border-transparent ..."
                     }`}
                     aria-label="Enter your email address"
                     error={null}
                   />
                   {error && (
-                    <p className="text-red-600 text-sm mt-1 ...">
+                    <p className="text-red-600 ...">
                       {" "}
-                      <FiAlertTriangle className="w-4 h-4" /> {error}{" "}
+                      <FiAlertTriangle /> {error}{" "}
                     </p>
                   )}
                 </div>
@@ -123,9 +123,7 @@ const NewsletterSection: React.FC = () => {
                   className="h-[56px] shadow-lg w-auto px-10"
                   disabled={loading}
                 >
-                  {loading ? (
-                    <FiLoader className="animate-spin h-5 w-5 mr-2" />
-                  ) : null}
+                  {loading ? <FiLoader className="animate-spin ..." /> : null}
                   {loading ? "Subscribing..." : "Subscribe Now"}
                 </Button>
               </form>
