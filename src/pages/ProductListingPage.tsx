@@ -6,15 +6,15 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 // *** ENSURE THESE IMPORT PATHS ARE CORRECT ***
 import { Product } from "../types/product";
 import { ALL_PRODUCTS_MOCK } from "../data/products";
 // Import Components
 import Breadcrumbs from "../components/common/Breadcrumbs";
-import FiltersSidebar from "../components/common/plp/FiltersSidebar"; // Using path user specified
+import FiltersSidebar from "../components/common/plp/FiltersSidebar"; // Using user's path
 import ProductCard from "../components/products/ProductCard";
-import Pagination from "../components/common/plp/Pagination"; // Using path user specified
+import Pagination from "../components/common/plp/Pagination"; // Using user's path
 import {
   FiGrid,
   FiList,
@@ -23,13 +23,13 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 
-const ITEMS_PER_PAGE = 12; // Adjust items per page as needed
+const ITEMS_PER_PAGE = 12;
 
 // Helper function to safely parse numbers from URL params
 const safeParseInt = (value: string | null, defaultValue: number): number => {
   if (value === null) return defaultValue;
   const parsed = parseInt(value, 10);
-  return isNaN(parsed) || parsed < 1 ? defaultValue : parsed; // Ensure positive page number
+  return isNaN(parsed) || parsed < 1 ? defaultValue : parsed;
 };
 
 // Define Filter State Type for clarity
@@ -52,7 +52,7 @@ const filterAndSortProducts = (
 ): Product[] => {
   console.log("Filtering/Sorting with:", filters, sort);
   let results = [...products];
-  // --- Apply Filters Safely ---
+  // Apply Filters Safely... (Ensure this logic is complete and correct)
   try {
     if (filters.category) {
       const f = filters.category.trim().toLowerCase();
@@ -102,7 +102,7 @@ const filterAndSortProducts = (
     console.error("Error during filtering:", e);
     return products;
   }
-  // --- Apply Sorting ---
+  // Apply Sorting...
   try {
     switch (sort) {
       case "price-asc":
@@ -126,127 +126,69 @@ const filterAndSortProducts = (
   } catch (e) {
     console.error("Error during sorting:", e);
   }
-  console.log("Filtered/Sorted Results Count:", results.length);
-  return results; // Return final results
+  console.log("Filtered Results Count:", results.length);
+  return results;
 };
 
 const ProductListingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const isMounted = useRef(false); // Track mount status
 
-  // --- State ---
-  // Initialize state ONCE from URL params using initializer functions
-  const [currentPage, setCurrentPage] = useState(() =>
-    safeParseInt(searchParams.get("page"), 1)
+  // --- Derive state directly from URL search params using useMemo ---
+  // These values are read-only representations of the URL state
+  const currentPage = useMemo(
+    () => safeParseInt(searchParams.get("page"), 1),
+    [searchParams]
   );
-  const [sortOption, setSortOption] = useState(
-    () => searchParams.get("sort") || "default"
+  const sortOption = useMemo(
+    () => searchParams.get("sort") || "default",
+    [searchParams]
   );
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(
-    () => searchParams.getAll("brand") || []
+  const selectedBrands = useMemo(
+    () => searchParams.getAll("brand") || [],
+    [searchParams]
   );
-  const [selectedCollections, setSelectedCollections] = useState<string[]>(
-    () => searchParams.getAll("collection") || ["all"]
+  const selectedCollections = useMemo(
+    () => searchParams.getAll("collection") || ["all"],
+    [searchParams]
   );
-  const [selectedSizes, setSelectedSizes] = useState<string[]>(
-    () => searchParams.getAll("size") || []
+  const selectedSizes = useMemo(
+    () => searchParams.getAll("size") || [],
+    [searchParams]
   );
-  const [selectedColors, setSelectedColors] = useState<string[]>(
-    () => searchParams.getAll("color") || []
+  const selectedColors = useMemo(
+    () => searchParams.getAll("color") || [],
+    [searchParams]
   );
-  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>(
+  const priceRange = useMemo(
     () => ({
       min: safeParseInt(searchParams.get("minPrice"), 1),
       max: safeParseInt(searchParams.get("maxPrice"), 1000),
-    })
+    }),
+    [searchParams]
   );
-  // State specifically derived from URL params initially, but can be updated
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(() =>
-    searchParams.get("category")
+  const selectedCategory = useMemo(
+    () => searchParams.get("category") || null,
+    [searchParams]
   );
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
-    () => searchParams.get("subCategory")
+  const selectedSubCategory = useMemo(
+    () => searchParams.get("subCategory") || null,
+    [searchParams]
   );
-  const [selectedTag, setSelectedTag] = useState<string | null>(() =>
-    searchParams.get("tag")
+  const selectedTag = useMemo(
+    () => searchParams.get("tag") || null,
+    [searchParams]
   );
 
-  const [loading] = useState(false); // Example loading state
-  const [error] = useState<string | null>(null); // Example error state
-  const isMounted = useRef(false); // Track initial mount vs subsequent updates
+  // --- Local UI state (not directly tied to URL filters) ---
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [loading, setLoading] = useState(false); // For visual feedback if needed
+  const [error, setError] = useState<string | null>(null);
   // --- End State ---
 
-  // --- Effect to Update Component State FROM URL Changes (e.g., back/forward) ---
-  useEffect(() => {
-    // Don't run on initial render because useState initializers already read URL
-    if (!isMounted.current) return;
-
-    console.log(
-      "Effect [searchParams]: Syncing state FROM URL Search Params:",
-      searchParams.toString()
-    );
-    // Update state based on current URL params
-    setSelectedBrands(searchParams.getAll("brand") || []);
-    setSelectedCollections(searchParams.getAll("collection") || ["all"]);
-    setSelectedSizes(searchParams.getAll("size") || []);
-    setSelectedColors(searchParams.getAll("color") || []);
-    setPriceRange({
-      min: safeParseInt(searchParams.get("minPrice"), 1),
-      max: safeParseInt(searchParams.get("maxPrice"), 1000),
-    });
-    setSelectedCategory(searchParams.get("category") || null);
-    setSelectedSubCategory(searchParams.get("subCategory") || null);
-    setSelectedTag(searchParams.get("tag") || null);
-    setSortOption(searchParams.get("sort") || "default");
-    setCurrentPage(safeParseInt(searchParams.get("page"), 1));
-  }, [searchParams]); // Run ONLY when searchParams reference changes
-
-  // --- Effect to Update URL FROM State Changes ---
-  useEffect(() => {
-    // Skip the very first render cycle
-    if (!isMounted.current) return;
-
-    console.log("Effect [State Change]: Updating URL from state");
-    const newParams = new URLSearchParams();
-    // Build query params string from current state...
-    if (selectedCategory) newParams.set("category", selectedCategory);
-    if (selectedSubCategory) newParams.set("subCategory", selectedSubCategory);
-    if (selectedTag) newParams.set("tag", selectedTag);
-    selectedBrands.forEach((b) => newParams.append("brand", b));
-    selectedCollections
-      .filter((c) => c !== "all")
-      .forEach((c) => newParams.append("collection", c));
-    selectedSizes.forEach((s) => newParams.append("size", s));
-    selectedColors.forEach((c) => newParams.append("color", c));
-    if (priceRange.min !== 1) newParams.set("minPrice", String(priceRange.min));
-    if (priceRange.max !== 1000)
-      newParams.set("maxPrice", String(priceRange.max));
-    if (sortOption !== "default") newParams.set("sort", sortOption);
-    if (currentPage !== 1) newParams.set("page", String(currentPage));
-
-    // Use replace to keep browser history clean during filtering/paging
-    // Only update if params actually changed (optional optimization)
-    if (newParams.toString() !== searchParams.toString()) {
-      setSearchParams(newParams, { replace: true });
-    }
-
-    // Depend on all state variables that influence the URL
-  }, [
-    selectedBrands,
-    selectedCollections,
-    selectedSizes,
-    selectedColors,
-    priceRange,
-    selectedCategory,
-    selectedSubCategory,
-    selectedTag,
-    sortOption,
-    currentPage,
-    setSearchParams,
-  ]);
-
-  // --- Filtering and Sorting (Memoized based on State) ---
+  // --- Filtering and Sorting Products (Memoized based on derived state) ---
   const filteredAndSortedProducts = useMemo(() => {
+    // Build filter object from derived state variables
     const currentFilters: FilterState = {
       category: selectedCategory,
       tag: selectedTag,
@@ -257,54 +199,53 @@ const ProductListingPage: React.FC = () => {
       colors: selectedColors,
       collections: selectedCollections,
     };
+    // In a real app with API calls, this might trigger fetching based on filters/sort
+    // For mock data, we filter directly here
     return filterAndSortProducts(ALL_PRODUCTS_MOCK, currentFilters, sortOption);
   }, [
+    priceRange,
     selectedBrands,
-    selectedCollections,
     selectedSizes,
     selectedColors,
-    priceRange,
+    selectedCollections,
+    sortOption,
     selectedCategory,
     selectedSubCategory,
     selectedTag,
-    sortOption,
-  ]);
-
-  // --- Scroll to Top on Page Change ---
-  useEffect(() => {
-    // Avoid scroll on initial render when page might be > 1 from URL
-    if (isMounted.current) {
-      console.log(
-        `Effect [currentPage Changed]: Scrolling to top for page ${currentPage}`
-      );
-      try {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } catch (error) {
-        console.error("PLP ScrollToTop failed:", error);
-      }
-    }
-  }, [currentPage]); // Trigger only when currentPage state changes
-
-  // --- Effect to mark initial render as done AFTER first render ---
-  useEffect(() => {
-    isMounted.current = true;
-  }, []);
+  ]); // Depend on derived filter/sort values
 
   // --- Pagination Logic ---
   const totalProducts = filteredAndSortedProducts.length;
   const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+  // Ensure current page from URL isn't invalid after filtering
+  const validCurrentPage = useMemo(
+    () => Math.max(1, Math.min(currentPage, totalPages || 1)),
+    [currentPage, totalPages]
+  );
+  // Calculate products for the current valid page
   const paginatedProducts = useMemo<Product[]>(() => {
-    // Use current page state, ensure it's valid
-    const validCurrentPage = Math.max(
-      1,
-      Math.min(currentPage, totalPages || 1)
-    );
     const startIndex = (validCurrentPage - 1) * ITEMS_PER_PAGE;
     return filteredAndSortedProducts.slice(
       startIndex,
       startIndex + ITEMS_PER_PAGE
     );
-  }, [filteredAndSortedProducts, currentPage, totalPages]);
+  }, [filteredAndSortedProducts, validCurrentPage]);
+
+  // --- Scroll to Top on Page Change ---
+  useEffect(() => {
+    // Only scroll after initial mount
+    if (isMounted.current) {
+      console.log(
+        `Effect [currentPage derived]: Scrolling to top for page ${currentPage}`
+      );
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [currentPage]); // Trigger when derived currentPage changes
+
+  // --- Effect to mark initial mount done ---
+  useEffect(() => {
+    isMounted.current = true;
+  }, []);
 
   // --- Dynamic Breadcrumbs ---
   const breadcrumbs = useMemo(() => {
@@ -330,53 +271,83 @@ const ProductListingPage: React.FC = () => {
     return items;
   }, [selectedCategory, selectedSubCategory, selectedTag]);
 
-  // --- Handlers to Update STATE Directly ---
+  // --- Handlers that update URL Search Params ---
+  // These functions create the *next* URL state based on user action
   const handlePageChange = useCallback(
     (newPage: number) => {
-      if (newPage !== currentPage) {
-        console.log(`Handler: Setting page state to ${newPage}`);
-        setCurrentPage(newPage); // Update state -> triggers URL update effect
-      }
+      console.log(`Handler: Updating URL page to ${newPage}`);
+      const newParams = new URLSearchParams(searchParams);
+      if (newPage <= 1) newParams.delete("page");
+      else newParams.set("page", String(newPage));
+      setSearchParams(newParams, { replace: true });
     },
-    [currentPage]
-  ); // Include currentPage in dependency
+    [searchParams, setSearchParams]
+  );
 
   const handleSortChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newSort = e.target.value;
       console.log(
-        `Handler: Setting sort state to ${newSort} and resetting page`
+        `Handler: Updating URL sort to ${newSort} and resetting page`
       );
-      setSortOption(newSort); // Update sort state
-      setCurrentPage(1); // Reset page state DIRECTLY
-      // State change triggers URL update effect
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("page"); // Reset page param
+      if (newSort === "default") newParams.delete("sort");
+      else newParams.set("sort", newSort);
+      setSearchParams(newParams, { replace: true });
     },
-    []
-  ); // Only needs setters which are stable
+    [searchParams, setSearchParams]
+  );
 
-  // Filter handlers update state and reset page state directly
-  const handleBrandChange = useCallback((brands: string[]) => {
-    setSelectedBrands(brands);
-    setCurrentPage(1);
-  }, []);
-  const handleCollectionChange = useCallback((collections: string[]) => {
-    setSelectedCollections(collections);
-    setCurrentPage(1);
-  }, []);
-  const handleSizeChange = useCallback((sizes: string[]) => {
-    setSelectedSizes(sizes);
-    setCurrentPage(1);
-  }, []);
-  const handleColorChange = useCallback((colors: string[]) => {
-    setSelectedColors(colors);
-    setCurrentPage(1);
-  }, []);
-  const handlePriceChange = useCallback(
-    (price: { min: number; max: number }) => {
-      setPriceRange(price);
-      setCurrentPage(1);
+  // Generic handler for sidebar filter changes
+  const handleFilterChange = useCallback(
+    (filterKey: string, value: any) => {
+      console.log(`Handler: Updating URL filter ${filterKey} to`, value);
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete("page"); // Reset page on filter change
+      newParams.delete(filterKey); // Clear previous values for this specific filter key
+
+      // Add new values based on type
+      if (Array.isArray(value)) {
+        // Handle arrays (brands, sizes, colors, collections)
+        value
+          .filter((v) => v !== "all")
+          .forEach((v) => newParams.append(filterKey, v));
+      } else if (filterKey === "priceRange") {
+        // Handle price range object
+        if (value.min > 1) newParams.set("minPrice", String(value.min));
+        else newParams.delete("minPrice");
+        if (value.max < 1000) newParams.set("maxPrice", String(value.max));
+        else newParams.delete("maxPrice");
+      }
+      // Add other single value filter logic here if needed
+
+      setSearchParams(newParams, { replace: true });
     },
-    []
+    [searchParams, setSearchParams]
+  );
+
+  // Specific handlers using the generic one, passed to FiltersSidebar
+  const handleBrandChange = useCallback(
+    (brands: string[]) => handleFilterChange("brand", brands),
+    [handleFilterChange]
+  );
+  const handleCollectionChange = useCallback(
+    (collections: string[]) => handleFilterChange("collection", collections),
+    [handleFilterChange]
+  );
+  const handleSizeChange = useCallback(
+    (sizes: string[]) => handleFilterChange("size", sizes),
+    [handleFilterChange]
+  );
+  const handleColorChange = useCallback(
+    (colors: string[]) => handleFilterChange("color", colors),
+    [handleFilterChange]
+  );
+  const handlePriceChange = useCallback(
+    (price: { min: number; max: number }) =>
+      handleFilterChange("priceRange", price),
+    [handleFilterChange]
   );
   // --- End Handlers ---
 
@@ -390,6 +361,7 @@ const ProductListingPage: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Filters Sidebar */}
           <div className="w-full lg:w-1/4 xl:w-1/5 flex-shrink-0">
+            {/* Pass DERIVED state values AND the URL-updating handlers */}
             <FiltersSidebar
               priceRange={priceRange}
               onPriceChange={handlePriceChange}
@@ -437,9 +409,11 @@ const ProductListingPage: React.FC = () => {
               </div>
               <div className="text-sm text-brand-dark flex-shrink-0">
                 Showing{" "}
-                {(currentPage - 1) * ITEMS_PER_PAGE +
+                {(validCurrentPage - 1) * ITEMS_PER_PAGE +
                   (paginatedProducts.length > 0 ? 1 : 0)}
-                -{(currentPage - 1) * ITEMS_PER_PAGE + paginatedProducts.length}{" "}
+                -
+                {(validCurrentPage - 1) * ITEMS_PER_PAGE +
+                  paginatedProducts.length}{" "}
                 of {totalProducts} results
               </div>
               <div className="relative flex-shrink-0">
@@ -468,7 +442,7 @@ const ProductListingPage: React.FC = () => {
                 <p className="font-semibold">Error:</p>
                 <p>{error}</p>
               </div>
-            ) : loading ? ( // Show loading indicator if needed
+            ) : loading ? ( // Show loading indicator (optional)
               <div className="flex justify-center items-center h-96">
                 <FiLoader className="animate-spin text-brand-primary text-4xl" />
               </div>
@@ -489,9 +463,10 @@ const ProductListingPage: React.FC = () => {
                     />
                   ))}
                 </div>
+                {/* Pass derived currentPage and the URL-updating handler */}
                 {totalPages > 1 && (
                   <Pagination
-                    currentPage={currentPage}
+                    currentPage={validCurrentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
                     className="mt-12 md:mt-16"
