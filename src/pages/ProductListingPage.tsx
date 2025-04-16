@@ -6,7 +6,7 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 // *** ENSURE THESE IMPORT PATHS ARE CORRECT ***
 import { Product } from "../types/product";
 import { ALL_PRODUCTS_MOCK } from "../data/products";
@@ -182,8 +182,8 @@ const ProductListingPage: React.FC = () => {
 
   // --- Local UI state (not directly tied to URL filters) ---
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [loading, setLoading] = useState(false); // For visual feedback if needed
-  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(false); // For visual feedback if needed
+  const [error] = useState<string | null>(null);
   // --- End State ---
 
   // --- Filtering and Sorting Products (Memoized based on derived state) ---
