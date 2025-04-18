@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../ui/Button"; // Import button component
 
 import heroLeftSrc from "../../assets/images/Hero-Section/hero-left.webp";
-import heroRightSrc from "../../assets/images/Hero-Section/hero-left.webp";
+import heroRightSrc from "../../assets/images/Hero-Section/hero-right.webp";
 import heroTopSrc from "../../assets/images/Hero-Section/hero-top.webp";
 import heroBottom from "../../assets/images/Hero-Section/hero-bottom.webp";
 // Placeholder image URLs
