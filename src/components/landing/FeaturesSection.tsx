@@ -47,36 +47,34 @@ const featuresData: FeatureData[] = [
 const FeaturesSection: React.FC = () => {
   return (
     // Container Div:
-    // - Negative top margin to potentially overlap the section above slightly (adjust as needed)
-    // - Relative positioning with z-index to ensure it's above hero background if overlapping
-    // - Max width to control its extent (e.g., max-w-6xl or max-w-7xl)
-    // - Centered horizontally (mx-auto)
-    // - Background white, rounded corners, shadow
-    // - Specific padding matching the design's visual spacing (adjust px/py)
-    <div className="relative z-10 -mt-10 sm:-mt-12 md:-mt-16 max-w-6xl mx-auto bg-white rounded-lg shadow-lg px-6 py-8 md:px-12 md:py-10 lg:px-16">
+    // *** REMOVED negative top margin (-mt-*) ***
+    // Added standard top margin (mt-*) for spacing below hero (adjust as needed)
+    // Kept relative and z-index in case it sits near other complex elements, but likely not needed now
+    <div className="relative z-10 mt-12 md:mt-16 max-w-6xl xl:max-w-7xl mx-auto bg-white rounded-lg shadow-lg px-8 py-8 sm:px-12 sm:py-10 lg:px-20 lg:py-12">
       {/* Grid layout for the four features */}
-      {/* Adjust gap based on visual spacing in design */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 lg:gap-16 xl:gap-20">
         {featuresData.map((feature) => (
-          // Feature Item Container: Center content vertically and horizontally
+          // Feature Item Container: Centered content
           <div
             key={feature.key}
-            className="flex flex-col items-center text-center gap-3 md:gap-4"
+            className="flex flex-col items-center text-center gap-2.5"
           >
             {/* Icon using img tag */}
-            <img
-              src={feature.iconSrc}
-              alt="" // Decorative, alt text provided by title/desc
-              aria-hidden="true"
-              // Size from CSS (38px)
-              className="w-[38px] h-[38px] object-contain mb-1" // Added slight margin below icon
-            />
+            <div className="h-[38px] mb-1.5">
+              <img
+                src={feature.iconSrc}
+                alt="" // Decorative
+                aria-hidden="true"
+                className="w-[38px] h-[38px] object-contain"
+                loading="lazy"
+              />
+            </div>
             {/* Text content */}
             <div className="space-y-1">
-              <h3 className="font-nunito text-xl font-medium text-black">
+              <h3 className="font-nunito text-xl font-medium text-black leading-[27px]">
                 {feature.title}
               </h3>
-              <p className="font-nunito text-sm text-brand-gray-dark leading-relaxed">
+              <p className="font-nunito text-sm text-brand-gray-dark leading-[19px]">
                 {feature.description}
               </p>
             </div>
